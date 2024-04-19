@@ -1,34 +1,43 @@
 package com.chanjun.ticker.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun rememberTickerColumnManager(
     textMeasurer: TextMeasurer,
-    textStyle: TextStyle
+    textStyle: TextStyle,
+    characterLists: ImmutableList<String>
 ): TickerColumnManager {
     val tickerDrawMetrics = rememberTickerDrawMetrics(textMeasurer, textStyle)
-    return remember(tickerDrawMetrics) {
-        TickerColumnManager(tickerDrawMetrics)
+    return remember(tickerDrawMetrics, characterLists) {
+        TickerColumnManager(tickerDrawMetrics, characterLists)
     }
 }
 
-class TickerColumnManager(private val metrics: TickerDrawMetrics) {
+@Immutable
+class TickerColumnManager(
+    private val metrics: TickerDrawMetrics,
+    characterLists: ImmutableList<String>
+) {
     val tickerColumns = ArrayList<TickerColumn>()
 
     var characterLists: Array<TickerCharacterList>? = null
         private set
-    private lateinit var supportedCharacters: Set<Char>
+
+    private val supportedCharacters: Set<Char>
 
     /**
      * @inheritDoc TickerView#setCharacterLists
      */
-    fun setCharacterLists(vararg characterLists: String) {
+
+    init {
         val tickerCharacterLists = characterLists.map { TickerCharacterList(it) }.toTypedArray()
         this.characterLists = tickerCharacterLists
 
@@ -136,9 +145,11 @@ class TickerColumnManager(private val metrics: TickerDrawMetrics) {
      * by {@param animationProgress}. As a side effect, this method will also translate the canvas
      * accordingly for the draw procedures.
      */
-    fun draw(drawScope: DrawScope) = with(drawScope) {
+    fun draw(drawScope: DrawScope, animationProgress: Float) = with(drawScope) {
         var y = 0f
         tickerColumns.forEach { tickerColumn ->
+            tickerColumn.setAnimationProgress(animationProgress)
+
             translate(left = y, top = 0f) {
                 tickerColumn.draw(this)
             }

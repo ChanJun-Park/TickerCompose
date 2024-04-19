@@ -3,6 +3,7 @@ package com.chanjun.ticker.compose
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.AbsoluteAlignment
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.clipRect
@@ -145,13 +148,25 @@ fun TickerText(
             modifier = modifier
         )
     } else {
-        Canvas(
-            modifier
-                .width(widthInDp)
-                .height(heightInDp)
-        ) {
-            clipRect(left = 0f, top = 0f, right = width, bottom = heightInDp.toPx()) {
-                tickerColumnManager.draw(this, animationProgress.value)
+        Box(modifier) {
+            Canvas(
+                Modifier
+                    .width(widthInDp)
+                    .height(heightInDp)
+                    .align(
+                        when (textAlign) {
+                            TextAlign.Left -> AbsoluteAlignment.TopLeft
+                            TextAlign.Right -> AbsoluteAlignment.TopRight
+                            TextAlign.End -> Alignment.TopEnd
+                            TextAlign.Center -> Alignment.TopCenter
+                            // TextAlign.Start, TextAlign.Justify, null
+                            else -> Alignment.TopStart
+                        }
+                    )
+            ) {
+                clipRect {
+                    tickerColumnManager.draw(this, animationProgress.value)
+                }
             }
         }
     }
@@ -190,7 +205,9 @@ fun TickerTextPreview() {
         TickerText(
             text = textToShow,
             color = Color.Black,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Left,
+            fontSize = 30.sp,
+            lineHeight = 34.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)

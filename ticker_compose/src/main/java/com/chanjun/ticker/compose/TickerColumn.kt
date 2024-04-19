@@ -232,7 +232,7 @@ class TickerColumn(
                 text = characterList[index].toString(),
                 topLeft = Offset(x = 0f, y = verticalOffset),
                 style = metrics.textStyle,
-                size = Size(width = targetWidth, height = charHeight)
+                size = Size(width = currentWidth, height = charHeight)
             )
             return true
         }

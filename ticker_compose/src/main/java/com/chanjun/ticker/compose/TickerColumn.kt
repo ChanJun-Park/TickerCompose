@@ -185,7 +185,7 @@ class TickerColumn(
      * progress and the previously interrupted animation state to render the characters
      * in the correct position on the canvas.
      */
-    fun DrawScope.draw() {
+    fun draw(drawScope: DrawScope) = with(drawScope) {
         if (
             drawText(
                 characterList = currentCharacterList,

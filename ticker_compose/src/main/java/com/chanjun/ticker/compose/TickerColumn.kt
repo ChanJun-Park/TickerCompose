@@ -53,6 +53,7 @@ class TickerColumn(
         this.targetChar = targetChar
         sourceWidth = currentWidth
         targetWidth = metrics.getCharWidth(targetChar)
+        charHeight = metrics.getCharHeight(targetChar)
         minimumRequiredWidth = max(sourceWidth.toDouble(), targetWidth.toDouble()).toFloat()
 
         // Calculate the current indices
@@ -138,7 +139,6 @@ class TickerColumn(
             currentBottomDelta = 0f
             previousBottomDelta = 0f
         }
-        val charHeight = metrics.getCharHeight()
 
         // First let's find the total height of this column between the start and end chars.
         val totalHeight = (charHeight * abs((endIndex - startIndex).toDouble())).toFloat()
@@ -176,7 +176,6 @@ class TickerColumn(
         // Figure out what the actual character index is in the characterList, and then
         // draw the character with the computed offset.
         bottomCharIndex = startIndex + bottomCharPosition.toInt() * directionAdjustment
-        this.charHeight = charHeight
         currentWidth = sourceWidth + (targetWidth - sourceWidth) * animationProgress
     }
 

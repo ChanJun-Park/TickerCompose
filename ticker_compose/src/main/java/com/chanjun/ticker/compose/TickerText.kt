@@ -40,38 +40,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.takeOrElse
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
-
-private val DEFAULT_FONT_SIZE = 16.sp
-private val DEFAULT_LINE_HEIGHT = 16.sp
 
 @Composable
 fun TickerText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    fontSize: TextUnit = DEFAULT_FONT_SIZE,
+    fontSize: TextUnit = TickerUtils.DEFAULT_FONT_SIZE,
     fontStyle: FontStyle? = null,
     fontWeight: FontWeight? = null,
     fontFamily: FontFamily? = null,
     letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
-    lineHeight: TextUnit = DEFAULT_LINE_HEIGHT,
+    lineHeight: TextUnit = TickerUtils.DEFAULT_LINE_HEIGHT,
     style: TextStyle = LocalTextStyle.current,
     vararg characterLists: String = arrayOf(
         TickerUtils.provideNumberList(),
         TickerUtils.provideAlphabeticalList()
     )
 ) {
-    check(fontSize != TextUnit.Unspecified && lineHeight != TextUnit.Unspecified) {
-        "fontSize or lineHeight must not be set to TextUnit.Unspecified"
-    }
-
     val textMeasurer = rememberTextMeasurer()
     val textColor = color.takeOrElse {
         style.color.takeOrElse {
@@ -110,6 +101,8 @@ fun TickerText(
         Animatable(0f)
     }
 
+    val textLayoutResult = textMeasurer.measure(text = text, style = mergedStyle)
+
     var width by remember { mutableFloatStateOf(0f) }
     val density = LocalDensity.current
     val widthInDp = with(density) {
@@ -117,11 +110,7 @@ fun TickerText(
     }
 
     val heightInDp = with(density) {
-        lineHeight.takeOrElse {
-            fontSize.takeOrElse {
-                DEFAULT_LINE_HEIGHT
-            }
-        }.toDp()
+        textLayoutResult.size.height.toDp()
     }
 
     LaunchedEffect(text) {
@@ -199,18 +188,17 @@ fun TickerTextPreview() {
         }
 
         var textToShow by remember {
-            mutableStateOf("test")
+            mutableStateOf("testggqqoo")
         }
 
         TickerText(
             text = textToShow,
             color = Color.Black,
             textAlign = TextAlign.Left,
-            fontSize = 30.sp,
+            fontSize = 34.sp,
             lineHeight = 34.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
                 .background(color = Color.White)
         )
 

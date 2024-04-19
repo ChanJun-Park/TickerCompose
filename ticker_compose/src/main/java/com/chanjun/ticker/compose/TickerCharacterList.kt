@@ -95,7 +95,7 @@ class TickerCharacterList(characterList: String) {
         return if (c == TickerUtils.EMPTY_CHAR) {
             0
         } else {
-            characterIndicesMap[c]?.let { it + 1 } ?: 0
+            characterIndicesMap[c]?.let { it + 1 } ?: -1
         }
     }
 

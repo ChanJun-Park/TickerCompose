@@ -50,21 +50,22 @@ class TickerDrawMetrics(
     }
 
     fun getCharHeight(character: Char): Float {
+        var measureTargetCharacter = character
         if (character == TickerUtils.EMPTY_CHAR) {
-            return 0f
+            measureTargetCharacter = '0'
         }
 
         // This method will lazily initialize the char height map.
-        val value = charHeights[character]
+        val value = charHeights[measureTargetCharacter]
         return if (value != null) {
             value
         } else {
             val width = textMeasurer.measure(
-                text = character.toString(),
+                text = measureTargetCharacter.toString(),
                 style = textStyle
             ).size.height.toFloat()
 
-            charHeights[character] = width
+            charHeights[measureTargetCharacter] = width
             width
         }
     }

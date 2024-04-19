@@ -1,6 +1,7 @@
 package com.chanjun.ticker.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextMeasurer
@@ -18,6 +19,7 @@ fun rememberTickerDrawMetrics(
     }
 }
 
+@Immutable
 class TickerDrawMetrics(
     val textMeasurer: TextMeasurer,
     val textStyle: TextStyle,

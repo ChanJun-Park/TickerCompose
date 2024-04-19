@@ -1,6 +1,7 @@
 package com.chanjun.ticker.compose
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.drawText
 import kotlin.math.abs
@@ -229,7 +230,9 @@ class TickerColumn(
             drawText(
                 textMeasurer = metrics.textMeasurer,
                 text = characterList[index].toString(),
-                topLeft = Offset(x = 0f, y = verticalOffset)
+                topLeft = Offset(x = 0f, y = verticalOffset),
+                style = metrics.textStyle,
+                size = Size(width = targetWidth, height = charHeight)
             )
             return true
         }

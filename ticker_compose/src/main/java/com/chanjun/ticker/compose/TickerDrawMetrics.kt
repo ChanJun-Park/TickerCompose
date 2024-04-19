@@ -19,8 +19,8 @@ fun rememberTickerDrawMetrics(
 }
 
 class TickerDrawMetrics(
-    private val textMeasurer: TextMeasurer,
-    private val textStyle: TextStyle,
+    val textMeasurer: TextMeasurer,
+    val textStyle: TextStyle,
     private val density: Density
 ) {
 
